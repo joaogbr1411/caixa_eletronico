@@ -74,3 +74,24 @@ def cadastro():
         
     print('Seu cadastro foi criado com sucesso!')    
     return users
+
+
+def depositar(CPF_ver, users):
+    dep_valor = int(input('Digite a quantia a ser depositada: '))
+    for database in users:
+        for CPF in database:
+            if CPF == CPF_ver:
+                database[CPF]["saldo"] = database[CPF]["saldo"] + dep_valor
+                content = json.dumps(users)
+                path.write_text(content) 
+                print(f'{dep_valor} foi depositado com sucesso!')
+
+def saque(CPF_ver, users):
+    saque = int(input('Digite a quantia para ser sacada: '))
+    for database in users:
+        for CPF in database:
+            if CPF == CPF_ver:
+                database[CPF]["saldo"] = database[CPF]["saldo"] - saque
+                content = json.dumps(users)
+                path.write_text(content) 
+                print(f'{saque} foi sacado com sucesso!')
