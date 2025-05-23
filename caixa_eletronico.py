@@ -4,6 +4,33 @@ import hashlib
 
 path = Path('user.json')
 
+def login(users):
+    CPF_ver = input('Bem vindo de volta, informe seu CPF: ')
+    Rawpass = input('Digite sua senha: ')
+    Rawpass = Rawpass.encode()
+    senha_ver = hashlib.sha256(Rawpass).hexdigest()
+    for database in users:
+        for CPF in database:
+            if CPF == CPF_ver and senha_ver == database[CPF]['senha']:                
+                print(f'Bem vindo, {database[CPF]["nome_completo"]}!')
+                while True:
+                    action = input(f'Por favor, digite a ação desejada: SACAR, DEPOSITAR ou EXTRATO. (Digite Q para deslogar): ').upper()
+                    if action == 'SACAR':
+                        saque(CPF_ver, users)
+                    elif action == 'DEPOSITAR':    
+                        depositar(CPF_ver, users)
+                    elif action == 'EXTRATO':    
+                        extrato(CPF_ver, users)    
+                    elif action == 'Q':                            
+                        print('Encerrando sistema... Até a próxima!')
+                        break
+                    else:
+                        print('Ação desconhecida.')
+            else:        
+                print('CPF ou senha incorreto. Por favor, verifique os dados inseridos.')
+
+    return CPF_ver   
+
 def cadastro():
     if path.exists():
         brute_info = path.read_text()
