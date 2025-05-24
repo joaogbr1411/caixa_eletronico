@@ -42,7 +42,7 @@ def cadastro():
         usuario = {
                 'nome_completo': input('Digite seu nome completo: '),
                 'idade': input('Digite sua idade: '),
-                'localizacao': input('Digite sua localização: '),
+                'email': input('Digite seu email: '),
                 'senha': input('Crie sua senha: '),
                 'saldo': 0
             }
@@ -77,7 +77,7 @@ def cadastro():
         usuario = {
                 'nome_completo': input('Digite seu nome completo: '),
                 'idade': input('Digite sua idade: '),
-                'localizacao': input('Digite sua localização: '),
+                'email': input('Digite seu email: '),
                 'senha': input('Crie sua senha: '),
                 'saldo': int(0)
             }
