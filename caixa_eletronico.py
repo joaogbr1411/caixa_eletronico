@@ -1,6 +1,8 @@
 from pathlib import Path
 import json
 import hashlib
+import smtplib
+from email.message import EmailMessage
 
 path = Path('user.json')
 
@@ -52,6 +54,21 @@ def cadastro():
         users.append(database)
         content = json.dumps(users)
         path.write_text(content)
+
+        msg = EmailMessage() ##cria objeto da classe message
+        msg['From'] = 'sobek0955@gmail.com'
+        msg['To'] = usuario['email']
+        msg['Subject'] = 'Sua conta foi criada com sucesso!'
+        corpo = f"Olá, {usuario['nome_completo'].title()}! Sua conta foi criada com sucesso. Realize seu primeiro depósito e inicie suas movimentações, obrigado pela confiança!"
+        msg.set_content(corpo)
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.starttls() #Ativa criptografia TLS na conexão
+            smtp.login('sobek0955@gmail.com', 'ltngjmqxmtqbxevc')
+            smtp.send_message(msg)    
+        
+        print('Seu cadastro foi criado com sucesso!')    
+        return users
          
     ## ESQUEMA DE ARMAZENAMENTO: a lista USERS, armazena o dicionario DATABASE, cuja chave é CPF, cuja armazena o dicionario USUARIO que contem as informações.                
     
@@ -71,11 +88,23 @@ def cadastro():
         database = {CPF: usuario}
         users = [database]
         content = json.dumps(users)
-        path.write_text(content)    
-        
-    print('Seu cadastro foi criado com sucesso!')    
-    return users
+        path.write_text(content)
 
+        msg = EmailMessage() ##cria objeto da classe message
+        msg['From'] = 'sobek0955@gmail.com' ##define remetente
+        msg['To'] = usuario['email'] ##define destinatario
+        msg['Subject'] = 'Sua conta foi criada com sucesso!' #define o assunto
+        corpo = f"Olá, {usuario['nome_completo'].title()}! Sua conta foi criada com sucesso. Realize seu primeiro depósito e inicie suas movimentações, obrigado pela confiança!" #criação do corpo
+        msg.set_content(corpo) #define o corpo
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp: ##conecta com o servidor SMPT do gmail
+            smtp.starttls() ##ativa o protocolo de criptografia TLS
+            smtp.login('sobek0955@gmail.com', 'ltngjmqxmtqbxevc') ##conecta coom o remetente
+            smtp.send_message(msg) ## envia a mensagem    
+        
+        print('Seu cadastro foi criado com sucesso!')    
+        return users    
+        
 
 def depositar(CPF_ver, users):
     dep_valor = int(input('Digite a quantia a ser depositada: '))
