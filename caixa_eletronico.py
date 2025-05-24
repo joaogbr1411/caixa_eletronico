@@ -4,6 +4,7 @@ import hashlib
 
 path = Path('user.json')
 
+##verifica cada dicionario em busca do CPF correspondente e da boas vindas ao nome do mesmo
 def login(users):
     CPF_ver = input('Bem vindo de volta, informe seu CPF: ')
     Rawpass = input('Digite sua senha: ')
@@ -95,3 +96,19 @@ def saque(CPF_ver, users):
                 content = json.dumps(users)
                 path.write_text(content) 
                 print(f'{saque} foi sacado com sucesso!')
+
+def extrato(CPF_ver, users):
+    for database in users:
+        for CPF in database:
+            if CPF == CPF_ver:
+                print(f'Seu saldo é {database[CPF]['saldo']}')
+
+
+initial_ver = input('Você já possui uma conta? Digite SIM ou NAO: ').upper() #INICIO DO CÓDIGO
+if initial_ver == 'NAO':
+    cadastro()
+
+if initial_ver == 'SIM':   
+    info = path.read_text() #CAPTURA AS INFORMAÇÕES
+    users = json.loads(info)
+    login(users)
