@@ -138,7 +138,7 @@ def extrato(CPF_ver, users):
     for database in users:
         for CPF in database:
             if CPF == CPF_ver:
-                print(f'Seu saldo é {database[CPF]['saldo']}')
+                print(f"Seu saldo é {database[CPF]['saldo']}")
 
 def redefinir(users):
     CPF_ver = input('Digite seu CPF: ')
