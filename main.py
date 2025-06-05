@@ -246,3 +246,199 @@ def bem_vindo(usuario):
                 smtp.send_message(msg)
     except Exception as e:
         messagebox.showwarning("Erro de E-mail", f"Não foi possível enviar o e-mail de boas-vindas: {e}")
+
+def redefinir_E1():
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    tk.Label(root, text="Redefinir Senha", font=HEADER_FONT).pack(pady=20)
+    tk.Label(root, text="Insira o CPF da sua conta:", font=DEFAULT_FONT).pack(pady=5)
+    entry = tk.Entry(root, font=DEFAULT_FONT, width=ENTRY_WIDTH)
+    entry.pack(pady=5)
+
+    def avancar():
+        CPF_vf = entry.get()
+        redefinir_E2(CPF_vf)
+
+    tk.Button(root, text="Avançar", command=avancar, font=BUTTON_FONT, width=15, height=2).pack(pady=15)
+    tk.Button(root, text="Voltar", command=tela_inicial, font=BUTTON_FONT, width=15, height=2).pack(pady=5)
+
+def redefinir_E2(CPF_vf):
+    try: 
+        brute_info = path.read_text()
+        users_local = json.loads(brute_info) 
+    except FileNotFoundError:
+        messagebox.showerror("Erro", "Arquivo de usuários não encontrado.")
+        return
+    except json.JSONDecodeError:
+        messagebox.showerror("Erro", "Erro ao ler dados de usuários. Arquivo JSON corrompido.")
+        return
+    except Exception as e:
+        messagebox.showerror("Erro", f"Ocorreu um erro inesperado ao carregar usuários: {e}")
+        return
+
+    found_user = False
+    target_email = None
+    for database in users_local:
+        for CPF in database:
+            if CPF_vf == CPF:
+                target_email = database[CPF]['email']
+                found_user = True
+                break
+        if found_user:
+            break
+
+    if not found_user:
+        messagebox.showerror("Erro", "CPF não encontrado.")
+        return
+
+    num = random.randint(100000, 999999)
+    email = target_email
+
+    msg = EmailMessage()
+    msg['From'] = 'sobek0955@gmail.com'
+    msg['To'] = email
+    msg['Subject'] = 'Recuperação da senha'
+    msg.set_content(
+        f'Recebemos uma solicitação para redefinir sua senha. '
+        f'Para confirmar, insira este código no programa: {num}'
+    )
+
+    try: 
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.starttls()
+            smtp.login('sobek0955@gmail.com', 'ltngjmqxmtqbxevc')
+            smtp.send_message(msg)
+    except Exception as e:
+        messagebox.showerror("Erro", f"Erro ao enviar email de verificação: {e}")
+        return
+
+    
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    tk.Label(root, text="Redefinir Senha - Verificação", font=HEADER_FONT).pack(pady=20)
+    tk.Label(root, text="Código de verificação:", font=DEFAULT_FONT).pack(pady=5)
+    entry_codigo = tk.Entry(root, font=DEFAULT_FONT, width=ENTRY_WIDTH)
+    entry_codigo.pack(pady=5)
+
+    tk.Label(root, text="Nova senha:", font=DEFAULT_FONT).pack(pady=5)
+    entry_senha = tk.Entry(root, show="*", font=DEFAULT_FONT, width=ENTRY_WIDTH)
+    entry_senha.pack(pady=5)
+
+    def concluir():
+        num_vf = entry_codigo.get()
+        nova_senha = entry_senha.get()
+        redefinir_E3(CPF_vf, num, num_vf, nova_senha)
+
+    tk.Button(root, text="Concluir", command=concluir, font=BUTTON_FONT, width=15, height=2).pack(pady=15)
+    tk.Button(root, text="Voltar", command=lambda: redefinir_E1(), font=BUTTON_FONT, width=15, height=2).pack(pady=5)
+    return
+                  
+def redefinir_E3(CPF_vf, num, num_vf, nova_senha):
+    if num_vf == str(num):
+        
+        global user 
+        found = False
+        for database in users:
+            for CPF in database:
+                if CPF == CPF_vf:
+                    database[CPF]['senha'] = nova_senha
+                    bytes = database[CPF]['senha'].encode()
+                    database[CPF]['senha'] = hashlib.sha256(bytes).hexdigest()
+                    found = True
+                    break
+            if found:
+                break
+        
+        if found:
+            try: 
+                content = json.dumps(users)
+                path.write_text(content)
+                messagebox.showinfo("Sucesso", "Sua senha foi redefinida com sucesso!")
+                tela_inicial()
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao salvar a nova senha: {e}")
+        else:
+            messagebox.showerror("Erro", "Erro interno: CPF não encontrado durante a redefinição.")
+           
+            tela_inicial() 
+    else:
+        messagebox.showerror("Erro", "Código de verificação incorreto.")
+                    
+login_botao = tk.Button(root, text="Login", command=ver_login, font=BUTTON_FONT, width=15, height=2)
+login_botao.pack(pady=10)
+
+cadastro_botao = tk.Button(root, text="Cadastrar-se", command=cadastro, font=BUTTON_FONT, width=15, height=2)
+cadastro_botao.pack(pady=5)
+
+redefinir_botao = tk.Button(root, text="Esqueceu sua senha?", command=redefinir_E1, font=BUTTON_FONT, width=20, height=1)
+redefinir_botao.pack(pady=5)
+
+def tela_inicial():
+    for widget in root.winfo_children():
+        widget.destroy()
+    
+    tk.Label(root, text="Simulador de caixa eletrônico", font=("Arial", 18, "bold")).pack(pady=10) 
+
+    cpf_label = tk.Label(root, text="CPF:", font=DEFAULT_FONT) 
+    cpf_label.pack(pady=(20, 5))
+    global cpf_entry 
+    cpf_entry = tk.Entry(root, font=DEFAULT_FONT, width=ENTRY_WIDTH) 
+    cpf_entry.pack(pady=5)
+
+    senha_label = tk.Label(root, text="Senha:", font=DEFAULT_FONT) 
+    senha_label.pack(pady=5)
+    global senha_entry 
+    senha_entry = tk.Entry(root, show="*", font=DEFAULT_FONT, width=ENTRY_WIDTH) 
+    senha_entry.pack(pady=5)
+
+    login_botao = tk.Button(root, text="Login", command=ver_login, font=BUTTON_FONT, width=15, height=2)
+    login_botao.pack(pady=10)
+
+    cadastro_botao = tk.Button(root, text="Cadastrar-se", command=cadastro, font=BUTTON_FONT, width=15, height=2)
+    cadastro_botao.pack(pady=5)
+
+    redefinir_botao = tk.Button(root, text="Esqueceu sua senha?", command=redefinir_E1, font=BUTTON_FONT, width=20, height=1)
+    redefinir_botao.pack(pady=5)
+
+
+def depositar(cpf, users):
+    for widget in root.winfo_children():
+        widget.destroy()
+    tk.Label(root, text="Realizar Depósito", font=HEADER_FONT).pack(pady=20)
+    tk.Label(root, text="Digite a quantia a ser depositada no campo abaixo:", font=DEFAULT_FONT).pack(pady=5)    
+    dep_entry = tk.Entry(root, font=DEFAULT_FONT, width=ENTRY_WIDTH)
+    dep_entry.pack(pady=5)
+
+    
+    action_frame = tk.Frame(root)
+    action_frame.pack(pady=15)
+
+    confirm = tk.Button(action_frame, text="Confirmar", command=lambda: depositar2(cpf, users), font=BUTTON_FONT, width=12, height=2)
+    confirm.pack(side=tk.LEFT, padx=10)
+    tk.Button(action_frame, text="Voltar ao Menu", command=lambda: menu_usuario(cpf, users), font=BUTTON_FONT, width=15, height=2).pack(side=tk.RIGHT, padx=10)
+
+
+    def depositar2(cpf, users):
+        for database in users:
+            for CPF in database:
+                if CPF == cpf:
+                    dep_valor = dep_entry.get()
+                    dep_valor = int(dep_valor)
+                    if dep_valor < 0:
+                        messagebox.showerror("Erro", "Valor inválido. Por favor, insira um número inteiro maior que 1 para o depósito.")
+                        return
+                    database[CPF]["saldo"] += dep_valor
+                    
+                    try: 
+                        content = json.dumps(users)
+                        path.write_text(content) 
+                        messagebox.showinfo("Sucesso", f'Depósito de {dep_valor}$ realizado com sucesso.')
+                    except Exception as e:
+                        messagebox.showerror("Erro", f"Erro ao salvar depósito: {e}")
+                        return
+
+                    menu_usuario(cpf, users) 
+                    return 
+        messagebox.showerror("Erro", "Usuário não encontrado.")     
