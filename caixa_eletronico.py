@@ -55,6 +55,12 @@ def cadastro():
                 'saldo': int(0)
             }
         
+        for database in users:
+            for CPF_db in database: #
+                if CPF_db == CPF:
+                    print("CPF já cadastrado. Por favor, insira um CPF não utilizado. Caso seu CPF tenha sido indevidamente cadastrado, entre em contato com nosso suporte.")
+                    return
+
         bytes = usuario['senha'].encode()
         usuario['senha'] = hashlib.sha256(bytes).hexdigest()
 

@@ -159,7 +159,7 @@ def cadastrar():
         for database in users:
             for CPF_db in database: #
                 if CPF_db == CPF:
-                    messagebox.showerror("Erro", "CPF já cadastro. Por favor, insira um CPF não utilizado. Caso seu CPF tenha sido indevidamente cadastrado, entre em contato com nosso suporte.")
+                    messagebox.showerror("Erro", "CPF já cadastrado. Por favor, insira um CPF não utilizado. Caso seu CPF tenha sido indevidamente cadastrado, entre em contato com nosso suporte.")
                     cadastro_tela()
                     return
 

@@ -1,6 +1,6 @@
 # Simulador de Caixa Eletrônico
 
-Este projeto consiste em um simulador de caixa eletrônico (ATM) totalmente funcional, desenvolvido em Python. Ele oferece duas interfaces de usuário: uma gráfica (GUI) construída com Tkinter e uma de linha de comando (CLI). O sistema permite que usuários se cadastrem, realizem login, gerenciem suas finanças através de saques e depósitos, e recuperem suas senhas de forma segura.
+Este projeto consiste em um simulador de caixa eletrônico (ATM) totalmente funcional, desenvolvido em Python. Ele oferece duas interfaces de usuário: uma gráfica (GUI) construída com Tkinter e uma de linha de comando (CLI). O sistema permite que usuários se cadastrem, realizem login, gerenciem suas finanças simuladas através de saques e depósitos, e recuperem suas senhas de forma segura.
 
 ## 🚀 Funcionalidades Principais
 
@@ -16,6 +16,9 @@ O simulador oferece uma gama completa de operações bancárias básicas:
 -   **Notificações por E-mail**:
     -   Envio de um e-mail de boas-vindas para o usuário logo após o cadastro bem-sucedido.
     -   Sistema de redefinição de senha que envia um código de verificação para o e-mail cadastrado, garantindo a identidade do usuário.
+-   **Tratamentos de erro**:
+    -   Tratamentos para múltiplos tipos de erro em potencial, além de prevenções de segurança fundamentais como bloqueio de CPFs duplicados, saques e depósitos com valores   incoerentes.
+        
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -50,7 +53,7 @@ A segurança é um pilar fundamental deste projeto, implementada através de:
 
 Para executar o simulador, siga os passos abaixo:
 
-1.  **Pré-requisitos**: Certifique-se de ter o Python 3 instalado em sua máquina. As bibliotecas utilizadas são parte da biblioteca padrão do Python, não sendo necessária a instalação de pacotes externos.
+1.  **Pré-requisitos**: Certifique-se de ter o Python 3.13 instalado em sua máquina. As bibliotecas utilizadas são parte da biblioteca padrão do Python, não sendo necessária a instalação de pacotes externos.
 
 2.  **Configuração de E-mail**:
     -   As funções de envio de e-mail estão configuradas para usar uma conta do Gmail.
@@ -65,11 +68,15 @@ Para executar o simulador, siga os passos abaixo:
     -   **Para a Interface de Linha de Comando (CLI)**: Abra um terminal e execute:
         ```bash
         python caixa_eletronico.py
-        ```
+
+ 4.  **Issues bem-vindas:**:       
+     - O esquema de organização do banco de dados pode não está da forma mais abstraída, em função de um desafio durante o desenvolvimento, de fazer com que novos dados sejam
+       *sejam adicionados* invés de *sobrescritos* no arquivo JSON. O meio de contornar concebido foi criar uma lista e realizar um .append dos novos dicionários. Issues que
+       contornem isso de forma mais abstraída serão bem-vindas, mas todo código também está aberto para novas abordagens.
 
 ## 👥 Desenvolvedores
 
-Este projeto foi desenvolvido por:
+Este projeto é um trabalho acadêmico para o Centro Universitário de João Pessoa e foi desenvolvido por:
 
--   José Gustavo Martinho Araújo de Almeida
--   João Gabriel Vasconcelos de Melo
+-   José Gustavo Martinho (P1)
+-   João Gabriel Vasconcelos (P1)
