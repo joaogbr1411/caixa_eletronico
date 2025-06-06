@@ -442,3 +442,46 @@ def depositar(cpf, users):
                     menu_usuario(cpf, users) 
                     return 
         messagebox.showerror("Erro", "Usuário não encontrado.")     
+
+def sacar(cpf, users):        
+    for widget in root.winfo_children():
+            widget.destroy()
+    tk.Label(root, text="Realizar Saque", font=HEADER_FONT).pack(pady=20)
+    tk.Label(root, text="Digite a quantia a ser sacada no campo abaixo:", font=DEFAULT_FONT).pack(pady=5)    
+    saque_entry = tk.Entry(root, font=DEFAULT_FONT, width=ENTRY_WIDTH)
+    saque_entry.pack(pady=5)
+
+    action_frame = tk.Frame(root)
+    action_frame.pack(pady=15)
+
+    confirm = tk.Button(action_frame, text="Confirmar", command=lambda: sacar2(cpf, users), font=BUTTON_FONT, width=12, height=2)
+    confirm.pack(side=tk.LEFT, padx=10)
+    tk.Button(action_frame, text="Voltar ao Menu", command=lambda: menu_usuario(cpf, users), font=BUTTON_FONT, width=15, height=2).pack(side=tk.RIGHT, padx=10)
+
+    def sacar2(cpf, users):
+        for database in users:
+            for CPF in database:
+                if CPF == cpf:
+                    saque_valor = saque_entry.get()
+                    try:
+                        saque_valor = int(saque_valor)
+                    except ValueError:
+                        messagebox.showerror("Erro", "Valor inválido. Por favor, insira um número inteiro para o saque.")
+                        return
+
+                    database[CPF]["saldo"] -= saque_valor
+                    
+                    try:
+                        content = json.dumps(users)
+                        path.write_text(content) 
+                        messagebox.showinfo("Sucesso", f'Saque de {saque_valor}$ realizado com sucesso.')
+                    except Exception as e:
+                        messagebox.showerror("Erro", f"Erro ao salvar saque: {e}")
+                        return
+                   
+                    menu_usuario(cpf, users)
+                    return
+        messagebox.showerror("Erro", "Usuário não encontrado.")
+                  
+
+root.mainloop()
