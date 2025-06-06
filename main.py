@@ -212,7 +212,6 @@ def cadastrar():
             messagebox.showerror("Erro de Cadastro", f"Erro ao criar arquivo de usuários: {e}")
             return
 
-
         bem_vindo(usuario)
 
         msg = tk.Label(root, text="Seu cadastro foi concluído com sucesso!", fg="green")
