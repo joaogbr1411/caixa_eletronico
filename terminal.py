@@ -55,6 +55,8 @@ def cadastro():
                 'saldo': int(0)
             }
         
+        
+
         for database in users:
             for CPF_db in database: #
                 if CPF_db == CPF:

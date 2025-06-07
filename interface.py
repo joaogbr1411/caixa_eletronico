@@ -155,7 +155,10 @@ def cadastrar():
                 'saldo': int(0)
             }
 
-        
+        if not cpf_criar.get() or not nome_criar.get() or not idade_criar.get() or not email_criar.get() or not senha_criar.get():  
+            messagebox.showerror("Erro", "Por favor, preencha todos os campos de informação.")
+            return
+
         for database in users:
             for CPF_db in database: #
                 if CPF_db == CPF:
@@ -170,8 +173,8 @@ def cadastrar():
         users.append(database_new_user)
 
         try: 
-            content = json.dumps(users)
-            path.write_text(content)
+            with open("user.json", "w") as file: 
+                json.dump(users, file, indent=4)
         except Exception as e:
             messagebox.showerror("Erro de Cadastro", f"Erro ao salvar dados do novo usuário: {e}")
             return
@@ -180,15 +183,6 @@ def cadastrar():
 
         msg = tk.Label(root, text="Seu cadastro foi concluído com sucesso!", fg="green")
         msg.pack()
-
-       
-
-        try: 
-            with open("user.json", "w") as file: 
-                json.dump(users, file, indent=4)
-        except Exception as e:
-            messagebox.showerror("Erro de Cadastro", f"Erro ao salvar dados do novo usuário: {e}")
-            return
 
         menu_usuario(CPF, users)
 
@@ -203,27 +197,16 @@ def cadastrar():
                 'senha': senha_criar.get(),
                 'saldo': int(0)
             }
+        
+        if not cpf_criar.get() or not nome_criar.get() or not idade_criar.get() or not email_criar.get() or not senha_criar.get():
+             messagebox.showerror("Erro", "Por favor, preencha todos os campos de informação.")
+             return
 
         bytes_senha = usuario['senha'].encode() 
         usuario['senha'] = hashlib.sha256(bytes_senha).hexdigest()
 
         database_new_user = {CPF: usuario} 
-        users = [database_new_user] 
-
-        try: 
-            content = json.dumps(users)
-            path.write_text(content)
-        except Exception as e:
-            messagebox.showerror("Erro de Cadastro", f"Erro ao criar arquivo de usuários: {e}")
-            return
-
-
-        bem_vindo(usuario)
-
-        msg = tk.Label(root, text="Seu cadastro foi concluído com sucesso!", fg="green")
-        msg.pack()
-
-       
+        users = [database_new_user]
 
         try: 
             with open("user.json", "w") as file: 
@@ -231,6 +214,11 @@ def cadastrar():
         except Exception as e:
             messagebox.showerror("Erro de Cadastro", f"Erro ao salvar dados do novo usuário: {e}")
             return
+
+        bem_vindo(usuario)
+
+        msg = tk.Label(root, text="Seu cadastro foi concluído com sucesso!", fg="green")
+        msg.pack()
 
         menu_usuario(CPF, users) 
 

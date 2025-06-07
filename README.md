@@ -6,7 +6,7 @@ Este projeto consiste em um simulador de caixa eletrônico (ATM) totalmente func
 
 O simulador oferece uma gama completa de operações bancárias básicas:
 
--   **Interface Dupla**: O usuário pode interagir com o sistema através de uma interface gráfica intuitiva (`main.py`) ou por uma interface de linha de comando (`caixa_eletronico.py`).
+-   **Interface Dupla**: O usuário pode interagir com o sistema através de uma interface gráfica intuitiva (`interface.py`) ou por uma interface de linha de comando (`terminal.py`).
 -   **Cadastro de Usuários**: Novos usuários podem se registrar fornecendo CPF, nome completo, idade e e-mail.
 -   **Login Seguro**: Autenticação de usuários por meio de CPF e senha.
 -   **Gestão de Saldo**:
@@ -57,7 +57,7 @@ Para executar o simulador, siga os passos abaixo:
 
 2.  **Configuração de E-mail**:
     -   As funções de envio de e-mail estão configuradas para usar uma conta do Gmail.
-    -   Para que funcione, você precisará alterar o e-mail e a senha no código (`sobek0955@gmail.com` e a senha associada) nos arquivos `main.py` e `caixa_eletronico.py`.
+    -   Para que funcione, você precisará alterar o e-mail e a senha no código (`sobek0955@gmail.com` e a senha associada) nos arquivos `terminal.py` e `interface.py`.
     -   **Importante**: O Gmail exige a criação de uma **"Senha de App"** para permitir que aplicações de terceiros façam login. Você deve gerar uma na configuração de segurança da sua Conta Google e usá-la no lugar da sua senha principal.
 
 3.  **Execução**:
