@@ -328,32 +328,39 @@ def redefinir_E2(CPF_vf):
 
 def redefinir_E3(CPF_vf, num, num_vf, nova_senha):
     if num_vf == str(num):
-        
-        global users 
+
+        if not nova_senha:
+            messagebox.showerror("Erro", "A nova senha não pode estar em branco.")
+            return
+
+        try:
+            users = json.loads(path.read_text())
+        except Exception as e:
+            messagebox.showerror("Erro", f"Não foi possível carregar os dados dos usuários: {e}")
+            return
+
         found = False
         for database in users:
-            for CPF in database:
-                if CPF == CPF_vf:
-                    database[CPF]['senha'] = nova_senha
-                    bytes_senha = database[CPF]['senha'].encode() 
-                    database[CPF]['senha'] = hashlib.sha256(bytes_senha).hexdigest()
-                    found = True
-                    break
-            if found:
+            if CPF_vf in database:
+
+                database[CPF_vf]['senha'] = nova_senha
+                bytes_senha = database[CPF_vf]['senha'].encode()
+                database[CPF_vf]['senha'] = hashlib.sha256(bytes_senha).hexdigest()
+                found = True
                 break
 
         if found:
-            try: 
-                content = json.dumps(users)
-                path.write_text(content)
+            try:
+                with open(path, "w") as file:
+                    json.dump(users, file, indent=4)
                 messagebox.showinfo("Sucesso", "Sua senha foi redefinida com sucesso!")
                 tela_inicial()
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao salvar a nova senha: {e}")
         else:
             messagebox.showerror("Erro", "Erro interno: CPF não encontrado durante a redefinição.")
-
             tela_inicial()
+
     else:
         messagebox.showerror("Erro", "Código de verificação incorreto.")
 
